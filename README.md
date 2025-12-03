@@ -1,93 +1,111 @@
-# 🔐 PassVault - Gestionnaire de Mots de Passe Sécurisé
+# PassVault
 
-[![Java](https://img.shields.io/badge/Java-11+-orange?style=for-the-badge&logo=openjdk)](https://openjdk.org/)
-[![JavaFX](https://img.shields.io/badge/JavaFX-13-blue?style=for-the-badge&logo=java)](https://openjfx.io/)
-[![Maven](https://img.shields.io/badge/Maven-Build-red?style=for-the-badge&logo=apache-maven)](https://maven.apache.org/)
-[![License](https://img.shields.io/badge/License-MIT-green?style=for-the-badge)](LICENSE)
-[![Security](https://img.shields.io/badge/Encryption-AES--256--GCM-purple?style=for-the-badge&logo=shield)](https://en.wikipedia.org/wiki/Galois/Counter_Mode)
+PassVault is a Java 11 password vault delivered as a standalone JavaFX desktop application. The code base favors transparent cryptographic flows, explicit persistence boundaries, and a clear separation between the staging logic (controllers) and the encryption primitives that protect each credential at rest.
 
-**PassVault** est un gestionnaire de mots de passe **local et sécurisé** développé en Java avec une interface graphique moderne JavaFX. Il offre un chiffrement de niveau militaire avec **AES-256-GCM** pour protéger vos identifiants sensibles.
+## Key Characteristics
 
-> 🛡️ **Vos données restent sur votre machine** - Aucune connexion internet requise, aucun cloud, confidentialité totale.
+- Local-only storage under `user_data/`; the application never opens network sockets nor delegates encryption to external services.
+- Master-password workflow backed by PBKDF2 (HmacSHA256, 65,536 iterations) and pluggable symmetric algorithms (AES-256, DES, DESede) with modes CBC, ECB, or GCM.
+- Layered encryption: session configuration is sealed with AES-GCM, individual credentials are additionally encrypted with the user-selected algorithm/mode before being appended to the vault file.
+- JavaFX presentation layer with FXML views (`login.fxml`, `primary.fxml`) and controllers that rely on plain POJOs (`User`, `Config`, `Encryption`, `FileManager`).
+- Modular project structure (`module-info.java`) exporting only `com.mycompany.passwordmanager` to the runtime.
 
----
+## Architecture Overview
 
-## ✨ Fonctionnalités
+- **Entry point**: `MainCLass` (JavaFX `Application`) initialises the transparent stage, loads `login.fxml`, and provides the `setRoot` helper used to swap scenes after authentication.
+- **Login flow**: `LoginController` handles registration, algorithm selection, master-password verification via `FileManager.validatePassword`, and transitions to the primary scene upon success. Animated background elements are isolated inside this controller.
+- **Vault operations**: `PrimaryController` mediates CRUD operations on credentials, uses observable lists for live filtering, and delegates persistence to the `User` domain object.
+- **Domain model**: `User` caches derived keys, coordinates encryption through `Encryption`, and calls `FileManager` to load or persist entries. It also provides dashboard metrics (total entries, expiration tracking).
+- **Persistence layer**: `FileManager` maintains two assets per user:
+  - `<username>_config.txt` combines the PBKDF2 salt, IV, encrypted configuration payload, and an encrypted verification token (`VALID_PASSWORD`).
+  - `<username>_passwords.txt` contains the AES-GCM encrypted vault (Base64 decoded on disk) that stores label, username, encrypted password, and optional expiration as `label||username||ciphertext||yyyy-MM-dd` lines.
 
-### 🔒 Sécurité Avancée
-- **Chiffrement AES-256-GCM** - Standard de chiffrement utilisé par les gouvernements et institutions financières
-- **Double couche de chiffrement** - Fichiers chiffrés + mots de passe individuels encodés
-- **Dérivation de clé PBKDF2** avec HmacSHA256 (65,536 itérations)
-- **Support multi-algorithmes** : AES, DES, Triple DES (DESede)
-- **Modes de chiffrement** : CBC, ECB, GCM
+## Security Model
 
-### 🎯 Gestion Intelligente
-- **Stockage illimité** de mots de passe
-- **Recherche instantanée** dans votre coffre-fort
-- **Dates d'expiration** configurables avec alertes
-- **Dashboard statistique** - Vue d'ensemble de vos identifiants
-- **Catégorisation** par labels et usernames
+1. During registration, the user selects an algorithm and mode. A 16-byte IV is generated and stored alongside a salt.
+2. PBKDF2 derives two AES keys:
+   - A configuration key (`username + "_config_key"`) used exclusively to encrypt the configuration file with AES-GCM.
+   - A file key (`username + "_file_encryption"`) used to seal the aggregated vault file.
+3. Each credential is encrypted with the `Config` session key (algorithm/mode chosen by the user). For GCM the IV is reused from the session; for CBC a per-entry IV could be introduced if side-channel protection becomes a requirement.
+4. A verification token encrypted with the master password is stored to validate future logins without exposing the password hash.
+5. Reads reverse the flow: config decrypted first, PBKDF2 derives keys, the vault file is decrypted, then individual entries are decrypted on demand before presentation.
 
-### 🎨 Interface Utilisateur Moderne
-- **Design épuré** avec JavaFX et CSS personnalisé
-- **Animations fluides** sur l'écran de connexion
-- **Interface responsive** et intuitive
-- **Confirmations de sécurité** avant actions critiques
+## Build and Run
 
----
+### Prerequisites
 
-## 🚀 Installation
+- Java Development Kit 11 or newer (tested with Temurin 17).
+- Maven 3.6 or newer.
 
-### Prérequis
-- **Java 11** ou supérieur ([Télécharger OpenJDK](https://adoptium.net/))
-- **Maven 3.6+** ([Télécharger Maven](https://maven.apache.org/download.cgi))
+### Commands
 
-### Build & Exécution
-
-```bash
-# Cloner le repository
-git clone https://github.com/votre-username/PassVault.git
-cd PassVault
-
-# Compiler et exécuter
+```powershell
 mvn clean javafx:run
+```
 
-# OU créer un exécutable autonome
+The Maven `javafx-maven-plugin` defined in `pom.xml` orchestrates compilation and launches the JavaFX runtime.
+
+To produce a runtime image with the JavaFX modules included:
+
+```powershell
 mvn clean package javafx:jlink
 ```
 
-L'exécutable sera généré dans : `target/PasswordManager-1.0-SNAPSHOT/bin/PasswordManager`
+Artifacts are emitted under `target/PasswordManager-<version>/`. The `bin/` subdirectory contains platform-specific launch scripts referencing the custom runtime image.
 
-### Alternative avec NetBeans
-Si vous rencontrez des problèmes, vous pouvez ouvrir le projet dans **NetBeans** et utiliser le build intégré.
+### IDE Support
 
----
+The project includes `nbactions.xml` for NetBeans execution profiles. When importing into other IDEs (IntelliJ IDEA, Eclipse), ensure the JavaFX modules are configured and VM options (`--module-path <javafx-lib> --add-modules javafx.controls,javafx.fxml`) are applied if you are not relying on the Maven plugin.
 
-## 📖 Guide d'Utilisation
+## Runtime Configuration
 
-### 🆕 Première Utilisation
+- **Algorithms**: AES (default), DES, DESede. The selection drives PBKDF2 key size (256, 56, 168 bits respectively).
+- **Modes**: CBC, ECB, GCM. GCM removes padding and provides tag-based authentication via `GCMParameterSpec`.
+- **Storage path**: `user_data/` is created adjacent to the executable. Place this directory under version control ignore rules and back it up securely.
+- **Rate limiting**: `LoginController` enforces a three-attempt limit before terminating the application to mitigate brute force attempts on the master password.
 
-1. **Lancez PassVault**
-2. **Créez un compte** avec un nom d'utilisateur unique
-3. **Choisissez votre algorithme** de chiffrement (AES recommandé)
-4. **Sélectionnez le mode** de chiffrement (GCM recommandé pour la sécurité maximale)
-5. **Définissez un mot de passe maître fort** - C'est la clé de votre coffre-fort !
+## User Interface Flow
 
-### 💾 Ajouter un Mot de Passe
+1. **Login/Registration**: Users authenticate or configure a new vault. Registration writes the config/verification pair before routing to the primary scene.
+2. **Dashboard**: `PrimaryController` presents an observable list of entries, search filtering, and computed statistics (total entries, expiring within 30 days, entries without expiry).
+3. **Credential lifecycle**: Additions are validated client-side, encrypted, persisted via `User.addPassword`, and immediately reflected in the list view. Deletions rewrite the vault file via `FileManager.overwritePasswords` to avoid stale entries.
+4. **Expiration monitoring**: Users can query upcoming expirations; calculations rely on Java's `ChronoUnit` to derive day deltas.
 
-1. Remplissez le **label** (ex: "Gmail", "Netflix")
-2. Entrez le **nom d'utilisateur** associé
-3. Saisissez le **mot de passe** à stocker
-4. *(Optionnel)* Définissez une **date d'expiration**
-5. Cliquez sur **Ajouter**
+## Project Layout
 
-### 🔍 Rechercher & Consulter
+```
+src/main/java/com/mycompany/passwordmanager/
+├─ App.java                # simple main wrapper (delegates to JavaFX Application)
+├─ MainCLass.java          # JavaFX Application bootstrap, scene switching
+├─ LoginController.java    # authentication, registration, rate limiting
+├─ PrimaryController.java  # vault UI, CRUD operations, statistics
+├─ User.java               # domain model, key derivation, credential store
+├─ Encryption.java         # PBKDF2, AES/DES helpers, GCM handling
+├─ FileManager.java        # encrypted persistence for configs and vault files
+├─ Config.java             # immutable session configuration snapshot
+└─ module-info.java        # module declaration exporting public API
 
-- Utilisez la **barre de recherche** pour filtrer vos entrées
-- **Sélectionnez** un élément et cliquez sur "Afficher" pour voir les détails
-- Les mots de passe sont **décryptés à la volée** uniquement lors de l'affichage
+src/main/resources/com/mycompany/passwordmanager/
+├─ login.fxml              # login/registration layout
+├─ primary.fxml            # main vault layout
+└─ styles.css              # JavaFX styling
+```
 
----
+## Extensibility Notes
+
+- Implement additional cipher algorithms or per-entry IV randomisation by extending `Encryption` and adapting `Config` to hold per-entry metadata.
+- Replace the local file persistence with a database-backed implementation by providing a new persistence adapter and adjusting `User` to depend on an interface rather than `FileManager` directly.
+- Introduce test coverage by wiring in TestFX for UI and JUnit/Mockito for domain and persistence layers; the current repository does not include automated tests.
+- Harden against side-channel leakage by zeroising sensitive fields after use and by splitting the verification token storage into structured metadata (e.g. JSON) rather than the current delimiter-based flat file.
+
+## Operational Guidance
+
+- Back up the `user_data/` directory after each session; without it the vault cannot be reconstructed.
+- Monitor `user_data/<username>_config.txt` for unexpected modifications; changes to the salt or IV will invalidate the stored verification token.
+- When rotating the master password, update both the config verification token and re-encrypt the vault to maintain consistency.
+- For distribution, bundle the application with the generated runtime image to avoid end-users managing JavaFX dependencies manually.
+
+## License
 
 ## 🏗️ Architecture Technique
 
