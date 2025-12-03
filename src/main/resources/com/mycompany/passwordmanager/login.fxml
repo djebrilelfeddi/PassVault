@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.String?>
+<?import javafx.collections.FXCollections?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Circle?>
+
+<StackPane alignment="TOP_CENTER" stylesheets="@styles.css" style="-fx-background-color: transparent;" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.mycompany.passwordmanager.LoginController">
+    <children>
+        
+        <VBox maxWidth="480" prefWidth="420" spacing="0" style="-fx-background-radius: 18;">
+            <children>
+                <StackPane>
+                    <Pane fx:id="backgroundPane" style="-fx-background-color: #0f172a; -fx-background-radius: 18;">
+                        <children>
+                            <Circle fx:id="circle1" radius="150" managed="false" style="-fx-fill: radial-gradient(center 25% 25%, radius 100%, rgba(34,211,238,0.15), transparent);" />
+                            <Circle fx:id="circle2" radius="200" managed="false" style="-fx-fill: radial-gradient(center 25% 25%, radius 100%, rgba(99,102,241,0.12), transparent);" />
+                            <Circle fx:id="circle3" radius="180" managed="false" style="-fx-fill: radial-gradient(center 25% 25%, radius 100%, rgba(147,51,234,0.1), transparent);" />
+                        </children>
+                    </Pane>
+                    
+                    <VBox spacing="0">
+                        <children>
+                <HBox alignment="CENTER_RIGHT" spacing="6" style="-fx-padding: 4 6 4 6; -fx-background-color: #0f172a; -fx-background-radius: 18 18 0 0;">
+                    <Button fx:id="minimizeBtn" onAction="#handleMinimize" style="-fx-background-color: rgba(148,163,184,0.2); -fx-text-fill: rgba(226,232,240,0.7); -fx-background-radius: 4; -fx-min-width: 24; -fx-max-width: 24; -fx-min-height: 18; -fx-max-height: 18; -fx-font-size: 12px; -fx-cursor: hand; -fx-padding: 0;" text="−" />
+                    <Button fx:id="closeBtn" onAction="#handleClose" style="-fx-background-color: rgba(244,63,94,0.2); -fx-text-fill: #f87171; -fx-background-radius: 4; -fx-min-width: 24; -fx-max-width: 24; -fx-min-height: 18; -fx-max-height: 18; -fx-font-size: 11px; -fx-cursor: hand; -fx-padding: 0;" text="✕" />
+                </HBox>
+                
+                <VBox alignment="CENTER" spacing="20" style="-fx-padding: 24 36 28 36;">
+                    <children>
+                        <VBox alignment="CENTER" spacing="6">
+                            <Label style="-fx-text-fill: white; -fx-font-size: 22px; -fx-font-weight: bold;" text="PassVault" />
+                            <Label alignment="CENTER" style="-fx-text-fill: rgba(226,232,240,0.75); -fx-font-size: 12px;" text="Sign in to unlock your vaults." wrapText="true" />
+                        </VBox>
+
+                        <VBox prefWidth="Infinity" spacing="12">
+                            <VBox spacing="6">
+                                <Label style="-fx-text-fill: rgba(226,232,240,0.9); -fx-font-size: 12px;" text="Username" />
+                                <TextField fx:id="usernameField" promptText="Your username here" style="-fx-background-radius: 10; -fx-background-color: rgba(148,163,184,0.16); -fx-text-fill: white; -fx-prompt-text-fill: rgba(148,163,184,0.6); -fx-border-color: transparent; -fx-padding: 10 14 10 14;" />
+                            </VBox>
+
+                            <VBox spacing="6">
+                                <Label style="-fx-text-fill: rgba(226,232,240,0.9); -fx-font-size: 12px;" text="Master password" />
+                                <PasswordField fx:id="masterPasswordField" promptText="********" style="-fx-background-radius: 10; -fx-background-color: rgba(148,163,184,0.16); -fx-text-fill: white; -fx-prompt-text-fill: rgba(148,163,184,0.6); -fx-border-color: transparent; -fx-padding: 10 14 10 14;" />
+                            </VBox>
+
+                            <VBox fx:id="newUserOptions" spacing="10" style="-fx-background-color: rgba(30,41,59,0.6); -fx-background-radius: 12; -fx-padding: 14 16 16 16;">
+                                <Label style="-fx-text-fill: rgba(226,232,240,0.9); -fx-font-size: 12px; -fx-font-weight: bold;" text="Encryption preferences" />
+                                <VBox spacing="8">
+                                    <Label style="-fx-text-fill: rgba(226,232,240,0.7); -fx-font-size: 11px;" text="Algorithm" />
+                                    <ComboBox fx:id="algorithmCombo" promptText="Select" style="-fx-background-radius: 10; -fx-background-color: rgba(148,163,184,0.16); -fx-border-color: transparent; -fx-padding: 6 10 6 10; -fx-text-fill: white;">
+                                        <items>
+                                            <FXCollections fx:factory="observableArrayList">
+                                                <String fx:value="AES" />
+                                                <String fx:value="DES" />
+                                                <String fx:value="DESede" />
+                                            </FXCollections>
+                                        </items>
+                                    </ComboBox>
+                                </VBox>
+                                <VBox spacing="8">
+                                    <Label style="-fx-text-fill: rgba(255, 255, 255, 1); -fx-font-size: 11px;" text="Cipher mode" />
+                                    <ComboBox fx:id="modeCombo" promptText="Select" style="-fx-background-radius: 10; -fx-background-color: rgba(148,163,184,0.16); -fx-border-color: transparent; -fx-padding: 6 10 6 10; -fx-text-fill: white;">
+                                        <items>
+                                            <FXCollections fx:factory="observableArrayList">
+                                                <String fx:value="CBC" />
+                                                <String fx:value="ECB" />
+                                                <String fx:value="GCM" />
+                                            </FXCollections>
+                                        </items>
+                                    </ComboBox>
+                                </VBox>
+                            </VBox>
+                        </VBox>
+
+                        <Label fx:id="statusLabel" alignment="CENTER" prefWidth="Infinity" style="-fx-text-fill: #f43f5e; -fx-font-size: 11px;" />
+
+                        <HBox alignment="CENTER" spacing="14">
+                            <Button onAction="#handleLogin" prefWidth="140" style="-fx-background-color: linear-gradient(to right, #22d3ee, #6366f1); -fx-background-radius: 999; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 10 0 10 0;" text="Login" />
+                            <Button onAction="#handleRegister" prefWidth="140" style="-fx-background-color: rgba(255, 255, 255, 0.16); -fx-background-radius: 999; -fx-text-fill: rgba(226,232,240,0.9); -fx-font-weight: bold; -fx-padding: 10 0 10 0;" text="Create account" />
+                        </HBox>
+                    </children>
+                </VBox>
+                        </children>
+                    </VBox>
+                </StackPane>
+            </children>
+        </VBox>
+    </children>
+</StackPane>

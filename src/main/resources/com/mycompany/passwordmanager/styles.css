@@ -1,0 +1,30 @@
+.combo-box .list-cell {
+    -fx-text-fill: white;
+}
+
+.combo-box {
+    -fx-text-fill: white;
+}
+
+.combo-box-popup .list-view .list-cell {
+    -fx-text-fill: black;
+}
+
+.hide-scrollbar .scroll-bar:vertical,
+.hide-scrollbar .scroll-bar:horizontal {
+    -fx-opacity: 0;
+    -fx-pref-width: 0;
+    -fx-pref-height: 0;
+    -fx-max-width: 0;
+    -fx-max-height: 0;
+    -fx-min-width: 0;
+    -fx-min-height: 0;
+    -fx-background-color: transparent;
+}
+
+.hide-scrollbar .scroll-bar:vertical .increment-button,
+.hide-scrollbar .scroll-bar:vertical .decrement-button,
+.hide-scrollbar .scroll-bar:horizontal .increment-button,
+.hide-scrollbar .scroll-bar:horizontal .decrement-button {
+    -fx-padding: 0;
+}

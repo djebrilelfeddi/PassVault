@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+
+<StackPane xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.mycompany.passwordmanager.PrimaryController" alignment="TOP_CENTER" style="-fx-background-color: transparent;">
+    <children>
+        <VBox spacing="0" maxWidth="860" prefWidth="820" style="-fx-background-color: #0f172a; -fx-background-radius: 18;">
+            <children>
+                <HBox alignment="CENTER_RIGHT" spacing="6" style="-fx-padding: 8 12 8 12; -fx-background-color: rgba(15,23,42,0.4); -fx-background-radius: 18 18 0 0;">
+                    <Button fx:id="minimizeBtn" text="−" onAction="#handleMinimize" style="-fx-background-color: rgba(148,163,184,0.2); -fx-text-fill: rgba(226,232,240,0.7); -fx-background-radius: 4; -fx-min-width: 28; -fx-min-height: 20; -fx-font-size: 14px; -fx-cursor: hand;" />
+                    <Button fx:id="closeBtn" text="✕" onAction="#handleClose" style="-fx-background-color: rgba(244,63,94,0.2); -fx-text-fill: #f87171; -fx-background-radius: 4; -fx-min-width: 28; -fx-min-height: 20; -fx-font-size: 12px; -fx-cursor: hand;" />
+                </HBox>
+                
+                <VBox spacing="24" style="-fx-padding: 24 40 36 40;">
+                    <children>
+                        <HBox alignment="CENTER_LEFT" spacing="10">
+                            <VBox spacing="4">
+                                <Label fx:id="welcomeLabel" text="Welcome back" style="-fx-text-fill: white; -fx-font-size: 26px; -fx-font-weight: bold;" />
+                                <Label text="Your secured vaults, centralized." style="-fx-text-fill: rgba(226,232,240,0.7); -fx-font-size: 12px;" />
+                            </VBox>
+                            <Region HBox.hgrow="ALWAYS" />
+                            <Button text="Check Expiration" onAction="#handleCheckExpiration" style="-fx-background-color: rgba(251,191,36,0.2); -fx-background-radius: 999; -fx-text-fill: #fbbf24; -fx-font-weight: bold; -fx-padding: 8 16 8 16;" />
+                            <Button text="Logout" onAction="#handleLogout" style="-fx-background-color: rgba(148,163,184,0.16); -fx-background-radius: 999; -fx-text-fill: rgba(226,232,240,0.9); -fx-font-weight: bold; -fx-padding: 8 16 8 16;" />
+                        </HBox>
+
+                        <HBox spacing="26" alignment="TOP_LEFT">
+                            <VBox spacing="18" prefWidth="460">
+                                <HBox spacing="12" alignment="CENTER_LEFT">
+                                    <StackPane alignment="CENTER_LEFT" HBox.hgrow="ALWAYS">
+                                        <TextField fx:id="searchField" promptText="Search vaults or usernames"
+                                                   style="-fx-background-radius: 999; -fx-background-color: rgba(30,41,59,0.8); -fx-text-fill: white; -fx-prompt-text-fill: rgba(148,163,184,0.7); -fx-padding: 10 16 10 40; -fx-border-color: rgba(148,163,184,0.25); -fx-border-radius: 999;" />
+                                        <Label text="🔍" mouseTransparent="true" style="-fx-text-fill: rgba(148,163,184,0.7); -fx-padding: 0 0 0 14;" />
+                                    </StackPane>
+                                    <Button text="Clear" onAction="#handleClearSearch" style="-fx-background-color: rgba(148,163,184,0.18); -fx-background-radius: 999; -fx-text-fill: rgba(226,232,240,0.85); -fx-font-weight: bold; -fx-padding: 8 16 8 16;" />
+                                </HBox>
+
+                                <HBox spacing="14">
+                                    <VBox spacing="4" alignment="CENTER_LEFT" style="-fx-background-color: rgba(30,41,59,0.65); -fx-background-radius: 14; -fx-padding: 16 18 16 18;">
+                                        <Label text="Total vaults" style="-fx-text-fill: rgba(148,163,184,0.8); -fx-font-size: 11px;" />
+                                        <Label fx:id="totalCountLabel" text="0" style="-fx-text-fill: white; -fx-font-size: 20px; -fx-font-weight: bold;" />
+                                    </VBox>
+                                    <VBox spacing="4" alignment="CENTER_LEFT" style="-fx-background-color: rgba(22,163,74,0.18); -fx-background-radius: 14; -fx-padding: 16 18 16 18;">
+                                        <Label text="No expiration" style="-fx-text-fill: rgba(74,222,128,0.8); -fx-font-size: 11px;" />
+                                        <Label fx:id="noExpiryCountLabel" text="0" style="-fx-text-fill: #4ade80; -fx-font-size: 20px; -fx-font-weight: bold;" />
+                                    </VBox>
+                                    <VBox spacing="4" alignment="CENTER_LEFT" style="-fx-background-color: rgba(251,191,36,0.18); -fx-background-radius: 14; -fx-padding: 16 18 16 18;">
+                                        <Label text="Expiring ≤30 days" style="-fx-text-fill: rgba(251,191,36,0.9); -fx-font-size: 11px;" />
+                                        <Label fx:id="expiringCountLabel" text="0" style="-fx-text-fill: #fbbf24; -fx-font-size: 20px; -fx-font-weight: bold;" />
+                                    </VBox>
+                                </HBox>
+
+                                <VBox spacing="12">
+                                    <Label text="Vaults" style="-fx-text-fill: rgba(226,232,240,0.9); -fx-font-size: 13px; -fx-font-weight: bold;" />
+                                    <ListView fx:id="passwordListView" prefHeight="280" styleClass="list-view hide-scrollbar" style="-fx-background-color: transparent; -fx-control-inner-background: transparent; -fx-border-color: rgba(148,163,184,0.18); -fx-border-radius: 18; -fx-background-radius: 18;">
+                                        <placeholder>
+                                            <Label text="No vault yet. Add your first credential below." style="-fx-text-fill: rgba(148,163,184,0.7);" />
+                                        </placeholder>
+                                    </ListView>
+                                    <HBox spacing="10" alignment="CENTER_RIGHT">
+                                        <Button text="Reveal" onAction="#handleShowPassword" style="-fx-background-color: rgba(148,163,184,0.16); -fx-background-radius: 10; -fx-text-fill: rgba(226,232,240,0.9); -fx-padding: 8 16 8 16;" />
+                                        <Button text="Delete" onAction="#handleDelete" style="-fx-background-color: rgba(244,63,94,0.16); -fx-background-radius: 10; -fx-text-fill: #f87171; -fx-padding: 8 16 8 16;" />
+                                    </HBox>
+                                </VBox>
+                            </VBox>
+
+                            <VBox spacing="14" prefWidth="320" style="-fx-background-color: rgba(30,41,59,0.55); -fx-background-radius: 16; -fx-padding: 24 28 26 28;">
+                                <Label text="Add new vault" style="-fx-text-fill: rgba(226,232,240,0.9); -fx-font-size: 13px; -fx-font-weight: bold;" />
+                                <VBox spacing="6">
+                                    <Label text="Label" style="-fx-text-fill: rgba(226,232,240,0.7); -fx-font-size: 11px;" />
+                                    <TextField fx:id="labelField" promptText="e.g. Gmail" style="-fx-background-radius: 10; -fx-background-color: rgba(148,163,184,0.16); -fx-text-fill: white; -fx-prompt-text-fill: rgba(148,163,184,0.6); -fx-border-color: transparent; -fx-padding: 10 14 10 14;" />
+                                </VBox>
+                                <VBox spacing="6">
+                                    <Label text="Username" style="-fx-text-fill: rgba(226,232,240,0.7); -fx-font-size: 11px;" />
+                                    <TextField fx:id="usernameField" promptText="e.g. john@example.com" style="-fx-background-radius: 10; -fx-background-color: rgba(148,163,184,0.16); -fx-text-fill: white; -fx-prompt-text-fill: rgba(148,163,184,0.6); -fx-border-color: transparent; -fx-padding: 10 14 10 14;" />
+                                </VBox>
+                                <VBox spacing="6">
+                                    <Label text="Password" style="-fx-text-fill: rgba(226,232,240,0.7); -fx-font-size: 11px;" />
+                                    <PasswordField fx:id="passwordField" promptText="********" style="-fx-background-radius: 10; -fx-background-color: rgba(148,163,184,0.16); -fx-text-fill: white; -fx-prompt-text-fill: rgba(148,163,184,0.6); -fx-border-color: transparent; -fx-padding: 10 14 10 14;" />
+                                </VBox>
+                                <VBox spacing="6">
+                                    <Label text="Expiration Date (optional)" style="-fx-text-fill: rgba(226,232,240,0.7); -fx-font-size: 11px;" />
+                                    <DatePicker fx:id="expirationDatePicker" promptText="Select date" style="-fx-background-radius: 10; -fx-background-color: rgba(148,163,184,0.16); -fx-text-fill: white;" />
+                                </VBox>
+                                <Button text="Add entry" onAction="#handleAddPassword" prefWidth="180" style="-fx-background-color: linear-gradient(to right, #22d3ee, #6366f1); -fx-background-radius: 999; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 10 0 10 0;" />
+                                <Label fx:id="statusLabel" style="-fx-text-fill: #34d399; -fx-font-size: 11px;" />
+                            </VBox>
+                        </HBox>
+                    </children>
+                </VBox>
+            </children>
+        </VBox>
+    </children>
+</StackPane>
