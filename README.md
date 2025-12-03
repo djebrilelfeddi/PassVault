@@ -1,4 +1,38 @@
+<div align="center">
+
+<!-- ASCII Art Logo -->
+```
+██████╗  █████╗ ███████╗███████╗██╗   ██╗ █████╗ ██╗   ██╗██╗  ████████╗
+██╔══██╗██╔══██╗██╔════╝██╔════╝██║   ██║██╔══██╗██║   ██║██║  ╚══██╔══╝
+██████╔╝███████║███████╗███████╗██║   ██║███████║██║   ██║██║     ██║   
+██╔═══╝ ██╔══██║╚════██║╚════██║╚██╗ ██╔╝██╔══██║██║   ██║██║     ██║   
+██║     ██║  ██║███████║███████║ ╚████╔╝ ██║  ██║╚██████╔╝███████╗██║   
+╚═╝     ╚═╝  ╚═╝╚══════╝╚══════╝  ╚═══╝  ╚═╝  ╚═╝ ╚═════╝ ╚══════╝╚═╝   
+```
+
+### 🔐 *Your secrets. Your machine. Your rules.*
+
+<br/>
+
+[![Java](https://img.shields.io/badge/Java-11+-ED8B00?style=for-the-badge&logo=openjdk&logoColor=white)](https://openjdk.org/)
+[![JavaFX](https://img.shields.io/badge/JavaFX-13-3776AB?style=for-the-badge&logo=java&logoColor=white)](https://openjfx.io/)
+[![AES-256](https://img.shields.io/badge/AES--256--GCM-Military_Grade-00D26A?style=for-the-badge&logo=gnuprivacyguard&logoColor=white)](https://en.wikipedia.org/wiki/Galois/Counter_Mode)
+[![Offline](https://img.shields.io/badge/100%25-Offline-FF6B6B?style=for-the-badge&logo=wifi-off&logoColor=white)](/)
+[![PBKDF2](https://img.shields.io/badge/PBKDF2-65,536_iterations-9B59B6?style=for-the-badge&logo=keybase&logoColor=white)](/)
+
+<br/>
+
+[🚀 Quick Start](#build-and-run) · [🔐 Security](#security-model) · [🏗️ Architecture](#architecture-overview) · [🤝 Contributing](#contributing)
+
+---
+
+</div>
+
+<br/>
+
 # PassVault
+
+> **PassVault** is a **zero-knowledge, offline-first** password manager built with Java 11 and JavaFX. No cloud. No subscriptions. No telemetry. Just military-grade encryption on YOUR machine.
 
 PassVault is a Java 11 password vault delivered as a standalone JavaFX desktop application. The code base favors transparent cryptographic flows, explicit persistence boundaries, and a clear separation between the staging logic (controllers) and the encryption primitives that protect each credential at rest.
 
