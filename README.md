@@ -1,7 +1,7 @@
 <div align="center">
 
 <!-- Logo -->
-<img src="https://iili.io/fIHzJTu.png" alt="PassVault Logo" width="800"/>
+<img src="https://iili.io/fIdXI5P.png" alt="PassVault Logo" width="800"/>
 
 <br/>
 
