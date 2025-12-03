@@ -136,123 +136,16 @@ src/main/resources/com/mycompany/passwordmanager/
 
 ## License
 
-## 🏗️ Architecture Technique
-
-```
-PassVault/
-├── src/main/java/com/mycompany/passwordmanager/
-│   ├── App.java              # Point d'entrée
-│   ├── MainClass.java        # Initialisation JavaFX
-│   ├── LoginController.java  # Authentification & inscription
-│   ├── PrimaryController.java# Interface principale du coffre
-│   ├── User.java             # Modèle utilisateur & gestion MDP
-│   ├── Encryption.java       # Utilitaires cryptographiques
-│   ├── Config.java           # Configuration de session
-│   └── FileManager.java      # Persistance chiffrée
-├── src/main/resources/
-│   ├── login.fxml            # Vue de connexion
-│   ├── primary.fxml          # Vue principale
-│   └── styles.css            # Styles personnalisés
-└── pom.xml                   # Configuration Maven
-```
-
-### 🔐 Flux de Chiffrement
-
-```
-Mot de passe → PBKDF2 (65,536 itérations) → Clé AES-256
-                         ↓
-Données sensibles → AES-256-GCM → Fichier chiffré (.txt)
-                         ↓
-         Chaque MDP → Encodage utilisateur (Algo+Mode choisi)
-```
-
----
-
-## 📊 Stockage des Données
-
-Les fichiers utilisateur sont stockés dans `target/PasswordManager-1.0-SNAPSHOT/bin/users_data/` :
-
-| Fichier | Description |
-|---------|-------------|
-| `<username>_config.txt` | Configuration chiffrée (algo, mode, sel, IV) |
-| `<username>_password.txt` | Coffre-fort de mots de passe chiffré |
-
----
-
-## 🛡️ Bonnes Pratiques de Sécurité
-
-1. **Mot de passe maître fort** - Minimum 12 caractères, mélangez majuscules, minuscules, chiffres et symboles
-2. **Ne partagez jamais** votre mot de passe maître
-3. **Sauvegardez** régulièrement le dossier `users_data`
-4. **Utilisez GCM** comme mode de chiffrement (authentification intégrée)
-5. **Définissez des expirations** pour forcer le renouvellement des mots de passe
-
----
-
-## 📚 Documentation API
-
-La documentation Javadoc complète est générée automatiquement :
-
-```bash
-mvn javadoc:javadoc
-```
-
-Consultez-la dans : `target/reports/apidocs/index.html`
-
----
-
-## 🔧 Technologies Utilisées
-
-| Technologie | Version | Usage |
-|-------------|---------|-------|
-| **Java** | 11+ | Langage principal |
-| **JavaFX** | 13 | Interface graphique |
-| **Maven** | 3.6+ | Gestion de build |
-| **PBKDF2** | - | Dérivation de clé |
-| **AES-256-GCM** | - | Chiffrement principal |
-| **SceneBuilder** | - | Design FXML |
-
----
-
-## 🤝 Contribution
-
-Les contributions sont les bienvenues ! 
-
-1. **Fork** le projet
-2. Créez une **branche** (`git checkout -b feature/AmazingFeature`)
-3. **Committez** vos changements (`git commit -m 'Add AmazingFeature'`)
-4. **Push** sur la branche (`git push origin feature/AmazingFeature`)
-5. Ouvrez une **Pull Request**
-
----
-
-## 📜 Licence
-
-Distribué sous licence MIT. Voir `LICENSE` pour plus d'informations.
-
----
-
-## 📞 Support
-
-- 📧 **Email** : [votre-email@example.com]
-- 🐛 **Issues** : [GitHub Issues](https://github.com/votre-username/PassVault/issues)
-
----
-
-## 🌟 Remerciements
-
-- [OpenJFX](https://openjfx.io/) pour JavaFX
-- [Apache Maven](https://maven.apache.org/) pour le système de build
-- La communauté Java pour les bonnes pratiques de sécurité
+MIT License. See `LICENSE` for more information.
 
 ---
 
 <p align="center">
-  <b>⭐ Si PassVault vous est utile, n'hésitez pas à mettre une étoile au projet ! ⭐</b>
+  <b>⭐ If PassVault is useful to you, feel free to star the project! ⭐</b>
 </p>
 
 ---
 
-### 🔑 Mots-clés SEO
+### 🔑 Keywords
 
-`password manager` `gestionnaire mot de passe` `java password manager` `javafx application` `secure password storage` `aes-256 encryption` `local password manager` `offline password manager` `open source password manager` `cryptographie java` `pbkdf2 java` `chiffrement aes` `coffre-fort numérique` `sécurité informatique` `gestion identifiants`
+`password manager` `java password manager` `javafx application` `secure password storage` `aes-256 encryption` `local password manager` `offline password manager` `open source password manager` `java cryptography` `pbkdf2 java` `aes encryption` `digital vault` `cybersecurity` `credential management` `desktop password manager`
