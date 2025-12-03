@@ -17,7 +17,7 @@
 
 <br/>
 
-[🚀 Quick Start](#build-and-run) · [🔐 Security](#security-model) · [🏗️ Architecture](#architecture-overview) · [🤝 Contributing](#contributing)
+[Quick Start](#build-and-run) · [Security](#security-model) · [Architecture](#architecture-overview)
 
 ---
 
