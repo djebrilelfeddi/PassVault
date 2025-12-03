@@ -27,7 +27,7 @@
 
 # PassVault
 
-> **PassVault** is a **zero-knowledge, offline-first** password manager built with Java 11 and JavaFX. No cloud. No subscriptions. No telemetry. Just military-grade encryption on YOUR machine.
+> **PassVault** is a **zero-knowledge, offline-first** password manager built with Java 11 and JavaFX. No cloud. No telemetry. Just military-grade encryption on YOUR machine.
 
 ---
 
@@ -44,7 +44,7 @@
 
 ---
 
-PassVault is a Java 11 password vault delivered as a standalone JavaFX desktop application. The code base favors transparent cryptographic flows, explicit persistence boundaries, and a clear separation between the staging logic (controllers) and the encryption primitives that protect each credential at rest.
+The code base favors transparent cryptographic flows, explicit persistence boundaries, and a clear separation between the staging logic (controllers) and the encryption primitives that protect each credential at rest.
 
 ## Key Characteristics
 
