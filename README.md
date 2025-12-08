@@ -97,9 +97,40 @@ mvn clean package javafx:jlink
 
 Artifacts are emitted under `target/PasswordManager-<version>/`. The `bin/` subdirectory contains platform-specific launch scripts referencing the custom runtime image.
 
-### IDE Support
+## Testing
 
-The project includes `nbactions.xml` for NetBeans execution profiles. When importing into other IDEs (IntelliJ IDEA, Eclipse), ensure the JavaFX modules are configured and VM options (`--module-path <javafx-lib> --add-modules javafx.controls,javafx.fxml`) are applied if you are not relying on the Maven plugin.
+The project includes a comprehensive test suite covering unit and integration tests:
+
+### Test Structure
+
+```
+src/test/java/com/mycompany/passwordmanager/
+├─ EncryptionTest.java      # 9 tests for encryption/decryption
+├─ UserTest.java            # 9 tests for user management
+├─ FileManagerTest.java     # 10 tests for persistence
+└─ IntegrationTest.java     # 4 integration tests
+```
+
+### Running Tests
+
+Execute all tests:
+```powershell
+mvn test
+```
+
+Run a specific test class:
+```powershell
+mvn test -Dtest=EncryptionTest
+```
+
+### Test Coverage
+
+- **EncryptionTest**: IV generation, key derivation (AES/DES), encryption/decryption with different modes (CBC/GCM), error handling
+- **UserTest**: User creation, password CRUD operations, persistence, expiration handling
+- **FileManagerTest**: Config save/load, password file operations, validation, edge cases
+- **IntegrationTest**: Complete user lifecycle, multi-session persistence, security scenarios, algorithm compatibility
+
+Total: **32 tests** covering all major functionality paths.
 
 ## Runtime Configuration
 
@@ -133,21 +164,13 @@ src/main/resources/com/mycompany/passwordmanager/
 ├─ login.fxml              # login/registration layout
 ├─ primary.fxml            # main vault layout
 └─ styles.css              # JavaFX styling
+
+src/test/java/com/mycompany/passwordmanager/
+├─ EncryptionTest.java     # encryption unit tests
+├─ UserTest.java           # user management tests
+├─ FileManagerTest.java    # persistence tests
+└─ IntegrationTest.java    # end-to-end tests
 ```
-
-## Extensibility Notes
-
-- Implement additional cipher algorithms or per-entry IV randomisation by extending `Encryption` and adapting `Config` to hold per-entry metadata.
-- Replace the local file persistence with a database-backed implementation by providing a new persistence adapter and adjusting `User` to depend on an interface rather than `FileManager` directly.
-- Introduce test coverage by wiring in TestFX for UI and JUnit/Mockito for domain and persistence layers; the current repository does not include automated tests.
-- Harden against side-channel leakage by zeroising sensitive fields after use and by splitting the verification token storage into structured metadata (e.g. JSON) rather than the current delimiter-based flat file.
-
-## Operational Guidance
-
-- Back up the `user_data/` directory after each session; without it the vault cannot be reconstructed.
-- Monitor `user_data/<username>_config.txt` for unexpected modifications; changes to the salt or IV will invalidate the stored verification token.
-- When rotating the master password, update both the config verification token and re-encrypt the vault to maintain consistency.
-- For distribution, bundle the application with the generated runtime image to avoid end-users managing JavaFX dependencies manually.
 
 ## License
 
